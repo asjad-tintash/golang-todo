@@ -18,7 +18,7 @@ func SendEmail(email string) error {
 
 	auth := smtp.PlainAuth("", from, password, smtpHost)
 	message := "Signup at http://localhost:5000/register with your email"
-	msg := "From: " + from + "\n" +  "Subject: ToDo App\n\n" + message
+	msg := "From: " + from + "\n" + "Subject: ToDo App\n\n" + message
 
 	err := smtp.SendMail("smtp.gmail.com:587", auth, from, to, []byte(msg))
 	fmt.Println(err)

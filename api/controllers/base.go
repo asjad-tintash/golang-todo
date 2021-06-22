@@ -14,10 +14,10 @@ import (
 
 type App struct {
 	Router *mux.Router
-	Db *gorm.DB
+	Db     *gorm.DB
 }
 
-func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string){
+func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string) {
 	DatabaseURI := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", DbHost, DbPort, DbName, DbUser, DbPassword)
 	var err error
 	a.Db, err = gorm.Open("postgres", DatabaseURI)
@@ -32,7 +32,6 @@ func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string){
 	a.Db.Debug().Model(&models.Task{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 	a.Db.Debug().Model(&models.UnAssignedTask{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 
-
 	a.Router = mux.NewRouter().StrictSlash(true)
 
 	a.InitializeRoutes()
@@ -45,7 +44,6 @@ func (a *App) InitializeRoutes() {
 	a.Router.HandleFunc("/register", a.Register).Methods("POST")
 	a.Router.HandleFunc("/login", a.Login).Methods("POST")
 	a.Router.HandleFunc("/asjad", a.CreateTasks).Methods("GET")
-
 
 	s := a.Router.PathPrefix("/api").Subrouter()
 	s.Use(middlewares.AuthJwtVerify)

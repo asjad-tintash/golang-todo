@@ -10,23 +10,21 @@ import (
 	"strings"
 )
 
-func SetContentTypeMiddleware(next http.Handler) http.Handler{
-	return http.HandlerFunc(func(w http.ResponseWriter, r * http.Request) {
+func SetContentTypeMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		next.ServeHTTP(w, r)
 	})
 }
 
-
-func AuthJwtVerify(next http.Handler) http.Handler{
+func AuthJwtVerify(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var resp = map[string]interface{}{
-			"status": "failed",
+			"status":  "failed",
 			"message": "Missing authorization token"}
 
 		var header = r.Header.Get("Authorization")
 		header = strings.TrimSpace(header)
-
 
 		jwtToken := strings.Split(header, "Bearer")
 		if len(jwtToken) == 1 {
@@ -46,7 +44,7 @@ func AuthJwtVerify(next http.Handler) http.Handler{
 			return []byte(os.Getenv("SECRET")), nil
 		})
 
-		if err != nil{
+		if err != nil {
 			fmt.Println(err)
 		}
 		if err != nil {

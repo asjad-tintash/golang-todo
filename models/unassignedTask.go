@@ -10,13 +10,13 @@ import (
 
 type UnAssignedTask struct {
 	gorm.Model
-	Title         string    `gorm:"size:100; not null" json:"title"`
-	Description   string    `gorm:"size:500" json:"description"`
-	DueDate       time.Time `gorm:"not null" json:"due_date"`
-	IsDone        bool      `gorm:"default: false" json:"is_done"`
+	Title       string    `gorm:"size:100; not null" json:"title"`
+	Description string    `gorm:"size:500" json:"description"`
+	DueDate     time.Time `gorm:"not null" json:"due_date"`
+	IsDone      bool      `gorm:"default: false" json:"is_done"`
 	//Creator       User      `gorm:"foreignKey:UserId" json:"-"`
-	UserId        uint      `gorm:"not null; OnDelete: CASCADE" json:"user_id"`
-	AssigneeEmail string    `gorm:"type:varchar(100); not null" json:"assignee_email"`
+	UserId        uint   `gorm:"not null; OnDelete: CASCADE" json:"user_id"`
+	AssigneeEmail string `gorm:"type:varchar(100); not null" json:"assignee_email"`
 }
 
 func (t *UnAssignedTask) Prepare() {
@@ -43,7 +43,6 @@ func (t *UnAssignedTask) Validate() error {
 
 	return nil
 }
-
 
 func GetTasksByEmail(email string, db *gorm.DB) (*[]UnAssignedTask, error) {
 	tasks := []UnAssignedTask{}

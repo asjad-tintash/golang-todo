@@ -13,16 +13,15 @@ import (
 	"strconv"
 )
 
-
-func (a * App) Register(w http.ResponseWriter, r * http.Request) {
+func (a *App) Register(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "Success",
+		"status":  "Success",
 		"message": "Registration Successful"}
 
 	user := &models.User{}
 	body, err := ioutil.ReadAll(r.Body)
 
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
@@ -38,7 +37,7 @@ func (a * App) Register(w http.ResponseWriter, r * http.Request) {
 
 	user.Prepare()
 	err = user.Validate("")
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
@@ -49,10 +48,9 @@ func (a * App) Register(w http.ResponseWriter, r * http.Request) {
 		return
 	}
 
-
 	// Check for user's assigned tasks
 	tasks, err := models.GetTasksByEmail(userCreated.Email, a.Db)
-	if err != nil{
+	if err != nil {
 		fmt.Println("Unable to create tasks for the user")
 	}
 
@@ -70,17 +68,16 @@ func (a * App) Register(w http.ResponseWriter, r * http.Request) {
 	return
 }
 
-
-func (a *App) Login (w http.ResponseWriter, r *http.Request) {
+func (a *App) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.Header.Get("Content-Type"))
 	var resp = map[string]interface{}{
-		"status": "Success",
+		"status":  "Success",
 		"message": "Login successfull"}
 
 	user := models.User{}
 	body, err := ioutil.ReadAll(r.Body)
 
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
@@ -91,25 +88,25 @@ func (a *App) Login (w http.ResponseWriter, r *http.Request) {
 	}
 
 	err = json.Unmarshal(body, &user)
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
 	user.Prepare()
 	err = user.Validate("login")
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
 	userDb, err := user.GetUser(a.Db)
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 
-	if userDb == nil{
+	if userDb == nil {
 		resp["status"] = "failed"
 		resp["message"] = "no user found with these credentials"
 		responses.JSON(w, http.StatusBadRequest, resp)
@@ -125,7 +122,7 @@ func (a *App) Login (w http.ResponseWriter, r *http.Request) {
 
 	token, err := utils.EncodeAuthToken(userDb.ID)
 
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
@@ -137,7 +134,7 @@ func (a *App) Login (w http.ResponseWriter, r *http.Request) {
 
 func (a *App) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "success",
+		"status":  "success",
 		"message": "user deleted successfully"}
 
 	vars := mux.Vars(r)

@@ -10,10 +10,9 @@ import (
 	"net/http"
 )
 
-
-func (a *App) AssignTask(w http.ResponseWriter, r *http.Request){
+func (a *App) AssignTask(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "Success",
+		"status":  "Success",
 		"Message": "Task created successfully"}
 
 	user := r.Context().Value("userID").(float64)
@@ -44,7 +43,7 @@ func (a *App) AssignTask(w http.ResponseWriter, r *http.Request){
 	userDb, err := models.GetUserByEmail(unassignedTask.AssigneeEmail, a.Db)
 	fmt.Println(unassignedTask)
 
-	if userDb != nil{
+	if userDb != nil {
 		// create a task for that user
 
 		task := models.Task{
@@ -58,7 +57,7 @@ func (a *App) AssignTask(w http.ResponseWriter, r *http.Request){
 
 		taskCreated, err := task.Save(a.Db)
 
-		if err != nil{
+		if err != nil {
 			responses.ERROR(w, http.StatusBadRequest, err)
 			return
 		}

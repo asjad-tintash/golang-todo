@@ -12,10 +12,9 @@ import (
 	"time"
 )
 
-
-func (a *App) CreateTask(w http.ResponseWriter, r *http.Request){
+func (a *App) CreateTask(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "Success",
+		"status":  "Success",
 		"Message": "Task created successfully"}
 
 	user := r.Context().Value("userID").(float64)
@@ -42,7 +41,7 @@ func (a *App) CreateTask(w http.ResponseWriter, r *http.Request){
 
 	task.UserId = uint(user)
 	taskCreated, err := task.Save(a.Db)
-	if err != nil{
+	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
@@ -53,12 +52,11 @@ func (a *App) CreateTask(w http.ResponseWriter, r *http.Request){
 	return
 }
 
-
-func (a *App) UpdateTask (w http.ResponseWriter, r *http.Request) {
+func (a *App) UpdateTask(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("coming here")
 	resp := map[string]interface{}{
-		"status": "Success",
+		"status":  "Success",
 		"message": "Task updated successfully"}
 
 	vars := mux.Vars(r)
@@ -106,10 +104,9 @@ func (a *App) UpdateTask (w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-
 func (a *App) GetTasks(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "success",
+		"status":  "success",
 		"message": "tasks"}
 
 	user := r.Context().Value("userID").(float64)
@@ -126,11 +123,9 @@ func (a *App) GetTasks(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-
-
 func (a *App) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	var resp = map[string]interface{}{
-		"status": "success",
+		"status":  "success",
 		"message": "task deleted successfully"}
 
 	vars := mux.Vars(r)
@@ -160,7 +155,6 @@ func (a *App) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, resp)
 	return
 }
-
 
 func (a *App) CreateTasks(w http.ResponseWriter, r *http.Request) {
 	tasks := []models.Task{}
