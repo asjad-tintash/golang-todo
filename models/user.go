@@ -17,7 +17,6 @@ type User struct {
 	LastName  string `gorm:"size:100;not null" json:"lastname"`
 }
 
-
 func HashPassword(password string) (string, error) {
 	passwordBytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 
@@ -30,16 +29,15 @@ func CheckPasswordHash(password, hash string) error {
 	return err
 }
 
-
-func (u * User) Prepare() {
+func (u *User) Prepare() {
 	u.Email = strings.TrimSpace(u.Email)
 	u.FirstName = strings.TrimSpace(u.FirstName)
 	u.LastName = strings.TrimSpace(u.LastName)
 }
 
-func (u *User) BeforeSave() error{
+func (u *User) BeforeSave() error {
 	hashedPassword, err := HashPassword(u.Password)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -47,7 +45,6 @@ func (u *User) BeforeSave() error{
 
 	return nil
 }
-
 
 func (u *User) Validate(action string) error {
 	switch action {
@@ -81,7 +78,6 @@ func (u *User) Validate(action string) error {
 	return nil
 }
 
-
 func (u *User) Save(db *gorm.DB) (*User, error) {
 	result := db.Create(&u)
 	if result.Error != nil {
@@ -92,7 +88,6 @@ func (u *User) Save(db *gorm.DB) (*User, error) {
 
 }
 
-
 func (u *User) GetUser(db *gorm.DB) (*User, error) {
 	user := &User{}
 	if err := db.Debug().Table("users").Where("email = ?", u.Email).First(user).Error; err != nil {
@@ -102,6 +97,20 @@ func (u *User) GetUser(db *gorm.DB) (*User, error) {
 	return user, nil
 }
 
+func GetUserById(id int, db *gorm.DB) (*User, error) {
+	user := &User{}
+	if err := db.Debug().Table("users").Where("id = ?", id).First(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
 
 
+func DeleteUser(id int, db *gorm.DB) error {
+	if err := db.Debug().Table("users").Where("id = ?", id).Delete(&User{}).Error; err != nil {
+		return err
+	}
 
+	return nil
+}

@@ -7,8 +7,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 )
 
 
@@ -114,6 +116,39 @@ func (a *App) Login (w http.ResponseWriter, r *http.Request) {
 	}
 
 	resp["token"] = token
+	responses.JSON(w, http.StatusOK, resp)
+	return
+}
+
+func (a *App) DeleteUser(w http.ResponseWriter, r *http.Request) {
+	var resp = map[string]interface{}{
+		"status": "success",
+		"message": "user deleted successfully"}
+
+	vars := mux.Vars(r)
+	user := r.Context().Value("userID").(float64)
+	userID := uint(user)
+
+	id, _ := strconv.Atoi(vars["id"])
+	userDb, err := models.GetUserById(id, a.Db)
+
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	}
+
+	if userDb.ID != userID {
+		resp["status"] = "failed"
+		resp["message"] = "you are not allowed to delete this object"
+		return
+	}
+
+	err = models.DeleteUser(id, a.Db)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+
 	responses.JSON(w, http.StatusOK, resp)
 	return
 }

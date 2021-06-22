@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-func main(){
+func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Fatal("Unable to load the env file")
 	}
@@ -19,7 +19,7 @@ func main(){
 		os.Getenv("DB_USER"),
 		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_PORT"),
-		)
+	)
 
 	app.RunServer()
 }

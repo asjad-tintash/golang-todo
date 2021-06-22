@@ -28,7 +28,7 @@ func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string){
 		fmt.Printf("Connected to the database\n")
 	}
 
-	a.Db.Debug().AutoMigrate(&models.User{})
+	a.Db.Debug().AutoMigrate(&models.User{}, &models.Task{})
 	a.Router = mux.NewRouter().StrictSlash(true)
 
 	a.InitializeRoutes()
@@ -40,6 +40,15 @@ func (a *App) InitializeRoutes() {
 	a.Router.HandleFunc("/", home).Methods("GET")
 	a.Router.HandleFunc("/register", a.Register).Methods("POST")
 	a.Router.HandleFunc("/login", a.Login).Methods("POST")
+
+	s := a.Router.PathPrefix("/api").Subrouter()
+	s.Use(middlewares.AuthJwtVerify)
+
+	s.HandleFunc("/user/{id:[0-9]+}", a.DeleteUser).Methods("DELETE")
+	s.HandleFunc("/task", a.CreateTask).Methods("POST")
+	s.HandleFunc("/task", a.GetTasks).Methods("GET")
+	s.HandleFunc("/task/{id:[0-9]+}", a.UpdateTask).Methods("PATCH")
+	s.HandleFunc("/task/{id:[0-9]+}", a.DeleteTask).Methods("DELETE")
 }
 
 func (a *App) RunServer() {
