@@ -49,6 +49,21 @@ func (a * App) Register(w http.ResponseWriter, r * http.Request) {
 		return
 	}
 
+
+	// Check for user's assigned tasks
+	tasks, err := models.GetTasksByEmail(userCreated.Email, a.Db)
+	if err != nil{
+		fmt.Println("Unable to create tasks for the user")
+	}
+
+	if tasks != nil {
+		err = models.GenerateTasks(*tasks, userCreated.ID, a.Db)
+	}
+
+	if err != nil {
+		fmt.Println("Failed to create tasks")
+	}
+
 	resp["user"] = userCreated
 	responses.JSON(w, http.StatusCreated, resp)
 

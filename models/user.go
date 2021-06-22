@@ -106,9 +106,20 @@ func GetUserById(id int, db *gorm.DB) (*User, error) {
 	return user, nil
 }
 
+func GetUserByEmail(email string, db *gorm.DB) (*User, error) {
+	user := &User{}
+	if err := db.Debug().Table("users").Where("email = ?", strings.TrimSpace(email)).First(user).Error; err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
 
 func DeleteUser(id int, db *gorm.DB) error {
-	if err := db.Debug().Table("users").Where("id = ?", id).Delete(&User{}).Error; err != nil {
+	//if err := db.Debug().Table("users").Where("id = ?", id).Delete(&User{}).Error; err != nil {
+	//	return err
+	//}
+	if err := db.Debug().Table("users").Where("id = ?", id).Unscoped().Delete(&User{}).Error; err != nil {
 		return err
 	}
 

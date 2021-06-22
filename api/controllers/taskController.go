@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 
@@ -137,9 +138,14 @@ func (a *App) DeleteTask(w http.ResponseWriter, r *http.Request) {
 	userID := uint(user)
 
 	id, _ := strconv.Atoi(vars["id"])
-	venue, err := models.GetTaskById(id, a.Db)
+	task, err := models.GetTaskById(id, a.Db)
 
-	if venue.UserId != userID {
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, err)
+		return
+	}
+
+	if task.UserId != userID {
 		resp["status"] = "failed"
 		resp["message"] = "you are not allowed to delete this object"
 		return
@@ -153,4 +159,22 @@ func (a *App) DeleteTask(w http.ResponseWriter, r *http.Request) {
 
 	responses.JSON(w, http.StatusOK, resp)
 	return
+}
+
+
+func (a *App) CreateTasks(w http.ResponseWriter, r *http.Request) {
+	tasks := []models.Task{}
+	for i := 0; i < 3; i++ {
+		t := models.Task{
+			Title:       "Title" + string(i),
+			Description: "Description" + string(i),
+			DueDate:     time.Time{},
+			IsDone:      false,
+			UserId:      2,
+		}
+		tasks = append(tasks, t)
+	}
+
+	fmt.Println(tasks)
+	a.Db.Create(tasks)
 }

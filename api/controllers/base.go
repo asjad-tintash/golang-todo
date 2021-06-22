@@ -28,7 +28,11 @@ func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string){
 		fmt.Printf("Connected to the database\n")
 	}
 
-	a.Db.Debug().AutoMigrate(&models.User{}, &models.Task{})
+	a.Db.Debug().AutoMigrate(&models.User{}, &models.Task{}, &models.UnAssignedTask{})
+	a.Db.Debug().Model(&models.Task{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	a.Db.Debug().Model(&models.UnAssignedTask{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+
+
 	a.Router = mux.NewRouter().StrictSlash(true)
 
 	a.InitializeRoutes()
@@ -40,6 +44,8 @@ func (a *App) InitializeRoutes() {
 	a.Router.HandleFunc("/", home).Methods("GET")
 	a.Router.HandleFunc("/register", a.Register).Methods("POST")
 	a.Router.HandleFunc("/login", a.Login).Methods("POST")
+	a.Router.HandleFunc("/asjad", a.CreateTasks).Methods("GET")
+
 
 	s := a.Router.PathPrefix("/api").Subrouter()
 	s.Use(middlewares.AuthJwtVerify)
@@ -49,6 +55,8 @@ func (a *App) InitializeRoutes() {
 	s.HandleFunc("/task", a.GetTasks).Methods("GET")
 	s.HandleFunc("/task/{id:[0-9]+}", a.UpdateTask).Methods("PATCH")
 	s.HandleFunc("/task/{id:[0-9]+}", a.DeleteTask).Methods("DELETE")
+
+	s.HandleFunc("/assign_task", a.AssignTask).Methods("POST")
 }
 
 func (a *App) RunServer() {

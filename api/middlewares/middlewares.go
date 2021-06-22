@@ -29,6 +29,13 @@ func AuthJwtVerify(next http.Handler) http.Handler{
 
 
 		jwtToken := strings.Split(header, "Bearer")
+		if len(jwtToken) == 1 {
+			resp["status"] = "failed"
+			resp["message"] = "failed to process the token"
+			responses.JSON(w, http.StatusBadRequest, resp)
+
+			return
+		}
 		header = strings.TrimSpace(jwtToken[1])
 
 		if header == "" {

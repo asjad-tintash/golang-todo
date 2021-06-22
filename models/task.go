@@ -13,10 +13,8 @@ type Task struct {
 	Description string    `gorm:"size:500" json:"description"`
 	DueDate     time.Time `gorm:"not null" json:"due_date"`
 	IsDone      bool      `gorm:"default: false" json:"is_done"`
-	Creator     User      `gorm:"foreignKey:UserId" json:"-"`
-	UserId      uint      `gorm:"not null,OnDelete: CASCADE" json:"user_id"`
-	//Assignee    User      `gorm:"foreignKey: AssigneeId" json:"-"`
-	//AssigneeId  uint
+	UserId      uint      `json:"user_id"`
+	Assignor    uint      `json:"assignor_id"`
 }
 
 func GetTaskById(id int, db *gorm.DB) (*Task, error) {
@@ -31,7 +29,7 @@ func GetTaskById(id int, db *gorm.DB) (*Task, error) {
 func (t *Task) Prepare() {
 	t.Title = strings.TrimSpace(t.Title)
 	t.Description = strings.TrimSpace(t.Description)
-	t.Creator = User{}
+	//t.UserId = nil
 }
 
 func (t *Task) Validate() error {
