@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"../../models"
-	"../middlewares"
-	"../responses"
 	"fmt"
+	"github.com/asjad-tintash/golang-todo/api/middlewares"
+	"github.com/asjad-tintash/golang-todo/api/responses"
+	"github.com/asjad-tintash/golang-todo/models"
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"

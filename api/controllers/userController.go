@@ -1,12 +1,15 @@
 package controllers
 
 import (
-	"../../models"
-	"../../utils"
-	"../responses"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/asjad-tintash/golang-todo/api/responses"
+	//"../../models"
+	//"../../utils"
+	//"../responses"
+	"github.com/asjad-tintash/golang-todo/models"
+	"github.com/asjad-tintash/golang-todo/utils"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"

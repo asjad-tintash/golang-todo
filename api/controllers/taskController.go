@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"../../models"
-	"../responses"
+	"github.com/asjad-tintash/golang-todo/models"
+	"github.com/asjad-tintash/golang-todo/api/responses"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"

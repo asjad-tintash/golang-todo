@@ -1,7 +1,7 @@
 package middlewares
 
 import (
-	"../responses"
+	"github.com/asjad-tintash/golang-todo/api/responses"
 	"context"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"

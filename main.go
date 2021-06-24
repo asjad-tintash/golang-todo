@@ -1,7 +1,7 @@
 package main
 
 import (
-	"./api/controllers"
+	"github.com/asjad-tintash/golang-todo/api/controllers"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
