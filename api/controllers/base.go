@@ -22,7 +22,7 @@ func (a *App) Initialize(DbHost, DbName, DbUser, DbPassword, DbPort string) {
 	var err error
 	a.Db, err = gorm.Open("postgres", DatabaseURI)
 	if err != nil {
-		fmt.Printf("Unable to connect to the database\n")
+		fmt.Printf("Unable to connect to the database asjad\n")
 		log.Fatal(err)
 	} else {
 		fmt.Printf("Connected to the database\n")
@@ -43,7 +43,6 @@ func (a *App) InitializeRoutes() {
 	a.Router.HandleFunc("/", home).Methods("GET")
 	a.Router.HandleFunc("/register", a.Register).Methods("POST")
 	a.Router.HandleFunc("/login", a.Login).Methods("POST")
-	a.Router.HandleFunc("/asjad", a.CreateTasks).Methods("GET")
 
 	s := a.Router.PathPrefix("/api").Subrouter()
 	s.Use(middlewares.AuthJwtVerify)
@@ -58,8 +57,8 @@ func (a *App) InitializeRoutes() {
 }
 
 func (a *App) RunServer() {
-	log.Printf("Server starting on port 5000")
-	log.Fatal(http.ListenAndServe(":5000", a.Router))
+	log.Printf("Server starting on port 8000")
+	log.Fatal(http.ListenAndServe(":8000", a.Router))
 }
 
 func home(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:12.7
+    container_name: "database"
+    ports:
+    - "24532:5432"
+    environment:
+    - POSTGRES_DB=postgres
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=postgres
+    networks:
+    - fullstack
+    volumes:
+    - database_postgres:/var/lib/postgresql/data
+
+  web:
+    build: .
+    container_name: "rest-api"
+    env_file:
+    - .env
+    ports:
+    - "5000:8000"
+    depends_on:
+      - db
+    networks:
+      - fullstack
+
+
+volumes:
+  database_postgres:
+
+networks:
+  fullstack:
+    driver: bridge

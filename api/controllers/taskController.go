@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"github.com/asjad-tintash/golang-todo/models"
-	"github.com/asjad-tintash/golang-todo/api/responses"
 	"encoding/json"
 	"fmt"
+	"github.com/asjad-tintash/golang-todo/api/responses"
+	"github.com/asjad-tintash/golang-todo/models"
 	"github.com/gorilla/mux"
 	"io/ioutil"
 	"net/http"
@@ -146,7 +146,7 @@ func (a *App) DeleteTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = models.DeleteVenue(id, a.Db)
+	err = models.DeleteTask(id, a.Db)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return

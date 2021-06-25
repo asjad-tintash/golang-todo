@@ -76,7 +76,7 @@ func TasksOfUser(UserId int, db *gorm.DB) (*[]Task, error) {
 	return &tasks, nil
 }
 
-func DeleteVenue(id int, db *gorm.DB) error {
+func DeleteTask(id int, db *gorm.DB) error {
 	if err := db.Debug().Table("tasks").Where("id = ?", id).Delete(&Task{}).Error; err != nil {
 		return err
 	}
